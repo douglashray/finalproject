@@ -17,7 +17,7 @@ export async function fetchTeam(search) {
   url: 'https://api-football-v1.p.rapidapi.com/v3/teams',
   params: {search: search},
   headers: {
-    'X-RapidAPI-Key': '5e85bc9967mshd77583dcb698abfp19a727jsn9b804fd5116d',
+    'X-RapidAPI-Key': process.env.REACT_APP_RAPID_API_KEY,
     'X-RapidAPI-Host': 'api-football-v1.p.rapidapi.com'
   }
 };
@@ -43,7 +43,7 @@ export async function fetchGames(venueDetails) {
     url: 'https://api-football-v1.p.rapidapi.com/v3/fixtures',
     params: {season: '2022', team: venueDetails.name, venue: venueDetails.venue},
     headers: {
-      'X-RapidAPI-Key': '5e85bc9967mshd77583dcb698abfp19a727jsn9b804fd5116d',
+      'X-RapidAPI-Key': process.env.REACT_APP_RAPID_API_KEY,
       'X-RapidAPI-Host': 'api-football-v1.p.rapidapi.com'
     }
   };
@@ -68,7 +68,7 @@ const options = {
   url: 'https://priceline-com-provider.p.rapidapi.com/v1/flights/locations',
   params: {name: 'Manchester', country:'United Kingdom'},
   headers: {
-    'X-RapidAPI-Key': '5e85bc9967mshd77583dcb698abfp19a727jsn9b804fd5116d',
+    'X-RapidAPI-Key': process.env.REACT_APP_RAPID_API_KEY,
     'X-RapidAPI-Host': 'priceline-com-provider.p.rapidapi.com'
   }
 };
