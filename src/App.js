@@ -2,56 +2,78 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { useDispatch, useSelector } from 'react-redux';
 // import styled from "styled-components";
 import React from 'react';
-import { fetchTeam, fetchGames, fetchLocation } from './actions';
+import { fetchTeam, fetchGames, fetchAirportDestination, fetchHotelDestination  } from './actions';
 import './index.css';
 
 function App () {
   const team = useSelector((state) => state.team);
   const games = useSelector((state) => state.games);
   const location = useSelector((state) => state.location);
-  console.log(location);
-  console.log(team);
+  // console.log('location' + location);
 
-  const venueDetails = {
-    name: team.id,
-    venue: team.venueId
-  };
+  console.log('games'+ JSON.stringify(games));
+  // console.log('games' + JSON.stringify(games));
+  // console.log('venueDetails'+ JSON.stringify(venueDetails));
 
   const dispatch = useDispatch();
-
+  var utc = new Date().getTime();
+  console.log(utc);
 
   const Team = (props) => {
     console.log('props' + JSON.stringify(props));
     return (
       <div>
         <ul>
-          <li id={props.id}>
-            <br>{props.name}</br>
-            <br></br><img src={props.logo} alt=''/>
+          <li key={props.id}>
+            <p>{props.name}</p>
+            <p><img src={props.logo} alt=''/></p>
+            <p>{props.venue}</p>
           </li>
         </ul>
       </div>
     )
-  }
+  };
 
   const displayTeam = () => {
-    console.log('displayTeam' + team)
     return team.map((p) => (
       <Team 
-        id={p.id}
+        id = {p.id}
         name = {p.name}  
         logo = {p.logo}
+        venue = {p.venue}
                 />
-      
-    //   <div><ul>
-    //   <li>
-    //     <br>{p.name}</br>
-    //     <br></br><img src={p.logo} alt=''/>
-    //   </li>
-    // </ul></div>
     ));
-
   };
+  
+  const displayGames = () => {
+    console.log('props' + JSON.stringify(games.timestamp));
+    return games.map((p) => (
+      (new Date(p.date) > new Date()) ?
+      // (p.timestamp < utc) ? 
+        // console.log(p.id) :
+        // console.log(p.timestamp)     
+      <ListGames 
+      id = {p.id}
+      date = {p.date}
+      awayTeam = {p.awayTeam}
+      awayLogo = {p.awayLogo}
+      /> : console.log(p.id) 
+    ));
+  };
+  
+  const ListGames = (props) => {
+    console.log('props' + JSON.stringify(props));
+    return (
+      <div>
+        <td key={props.id}>
+          <tr>Date: {props.date}</tr>
+          <tr>vs. {props.awayTeam}</tr>
+          <tr><img className='away-team-logo' src={props.awayLogo} alt=''/></tr>
+        </td>
+      </div>
+    )
+  };
+
 
   const searchTeam = (event) => {
     event.preventDefault();
@@ -62,8 +84,8 @@ function App () {
       console.log('waiting for search');
     } else {
       dispatch(fetchTeam(search))
-      dispatch(fetchGames(venueDetails))
-      dispatch(fetchLocation(search))
+      dispatch(fetchGames('42','494'))
+      // dispatch(fetchAirportDestination(search))
     }
   }
 
@@ -78,7 +100,12 @@ function App () {
       </div>
       <div className='display'>
 
-        {displayTeam}
+        {displayTeam(team)}
+      </div>
+      <div className='games'>
+        <table>
+        {displayGames(games)}
+        </table>
       </div>
     </div>
     

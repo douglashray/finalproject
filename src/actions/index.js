@@ -2,7 +2,8 @@ import axios from "axios";
 
 export const FETCH_TEAM = "FETCH_TEAM";
 export const FETCH_GAMES = "FETCH_GAMES";
-export const FETCH_LOCATION = "FETCH_LOCATION";
+export const FETCH_AIRPORT_DESTINATION = "FETCH_AIRPORT_DESTINATION";
+export const FETCH_HOTEL_DESTINATION = "FETCH_HOTEL_DESTINATION";
 
 
 export async function fetchTeam(search) {
@@ -24,7 +25,7 @@ export async function fetchTeam(search) {
 
   const request = await
   axios.request(options).then(function (response) {
-    console.log(response.data);
+    // console.log(response.data);
     return response.data;
   }).catch(function (error) {
     console.error(error);
@@ -36,12 +37,12 @@ export async function fetchTeam(search) {
   }
 }
 
-export async function fetchGames(venueDetails) {
-  console.log(venueDetails);
+export async function fetchGames(name, venueId) {
+  console.log('fetchGames' + JSON.stringify(name) + JSON.stringify(venueId));
   const options = {
     method: 'GET',
     url: 'https://api-football-v1.p.rapidapi.com/v3/fixtures',
-    params: {season: '2022', team: venueDetails.name, venue: venueDetails.venue},
+    params: {season: '2022', team: name, venue: venueId},
     headers: {
       'X-RapidAPI-Key': process.env.REACT_APP_RAPID_API_KEY,
       'X-RapidAPI-Host': 'api-football-v1.p.rapidapi.com'
@@ -50,7 +51,6 @@ export async function fetchGames(venueDetails) {
 
   const request = await
   axios.request(options).then(function (response) {
-    console.log(response.data);
     return response.data;
   }).catch(function (error) {
     console.error(error);
@@ -62,7 +62,7 @@ export async function fetchGames(venueDetails) {
   }
 }
 
-export async function fetchLocation(city) {
+export async function fetchAirportDestination(city) {
 const options = {
   method: 'GET',
   url: 'https://priceline-com-provider.p.rapidapi.com/v1/flights/locations',
@@ -75,15 +75,41 @@ const options = {
 
 const request = await
   axios.request(options).then(function (response) {
-    console.log(response.data);
+    console.log('fetchAirportDestination' + JSON.stringify(response.data));
     return response.data;
   }).catch(function (error) {
     console.error(error);
   });
 
   return {
-    type: FETCH_LOCATION,
+    type: FETCH_AIRPORT_DESTINATION,
     payload: request
   }
 
 }
+
+export async function fetchHotelDestination(city) {
+  const options = {
+    method: 'GET',
+    url: 'https://priceline-com-provider.p.rapidapi.com/v1/hotels/locations-by-geo',
+    params: {longitude: '14.418540', latitude: '50.073658'},
+    headers: {
+      'X-RapidAPI-Key': process.env.REACT_APP_RAPID_API_KEY,
+      'X-RapidAPI-Host': 'priceline-com-provider.p.rapidapi.com'
+    }
+  };
+  
+  const request = await
+    axios.request(options).then(function (response) {
+      console.log('fetchHotelDestination' +response.data);
+      return response.data;
+    }).catch(function (error) {
+      console.error(error);
+    });
+  
+    return {
+      type: FETCH_HOTEL_DESTINATION,
+      payload: request
+    }
+  
+  }

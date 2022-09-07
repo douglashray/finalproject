@@ -1,13 +1,15 @@
-import { FETCH_LOCATION } from "../actions";
+import { FETCH_HOTEL_DESTINATION } from "../actions";
 
-const locationReducer = function(state = [], action) {
+const initialState = [];
+
+const destinationHotelReducer = function(state = initialState, action) {
   
   if(action.error === true) {
     alert('error, please try again');
     return state;
   } else {
     switch (action.type) {
-      case FETCH_LOCATION:
+      case FETCH_HOTEL_DESTINATION:
         // console.log('action.payload' + JSON.stringify(action.payload));
         // console.log('action.payload.response' + JSON.stringify(action.payload.response));
         const citySearch = action.payload;
@@ -17,6 +19,8 @@ const locationReducer = function(state = [], action) {
             id: p.id,
             cityCode: p.cityCode,
             city: p.cityName,
+            latitude: p.lat,
+            longitude: p.lon
           }
         })
 
@@ -27,4 +31,4 @@ const locationReducer = function(state = [], action) {
   }
 };
 
-export default locationReducer;
+export default destinationHotelReducer;
