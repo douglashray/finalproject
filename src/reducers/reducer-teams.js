@@ -12,7 +12,7 @@ const teamReducer = function(state = [], action) {
         // console.log('action.payload.response' + JSON.stringify(action.payload.response));
         const teamSearch = action.payload.response;
 
-        const team = teamSearch.map((p) => {
+        const team = teamSearch.slice(0,1).map((p) => {
           return {
             id: p.team.id,
             name: p.team.name,
@@ -27,7 +27,7 @@ const teamReducer = function(state = [], action) {
 
         // console.log('teamreducer' + JSON.stringify(team));
 
-        return [...state, team[0]];
+        return [...team];
 
       default: return state;
     }

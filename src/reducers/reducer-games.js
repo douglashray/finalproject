@@ -13,7 +13,6 @@ const gamesReducer = function(state = initialState, action) {
         // console.log('action.payload' + JSON.stringify(action.payload));
         // console.log('action.payload.response' + JSON.stringify(action.payload.response));
         const gamesSearch = action.payload.response;
-        console.log(gamesSearch);
 
         const games = gamesSearch.map((p) => {
           return {

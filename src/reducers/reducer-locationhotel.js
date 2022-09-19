@@ -14,17 +14,13 @@ const destinationHotelReducer = function(state = initialState, action) {
         // console.log('action.payload.response' + JSON.stringify(action.payload.response));
         const citySearch = action.payload;
 
-        const location = citySearch.map((p) => {
+        const location = citySearch.slice(0,1).map((p) => {
           return {
-            id: p.id,
-            cityCode: p.cityCode,
-            city: p.cityName,
-            latitude: p.lat,
-            longitude: p.lon
+            id: p.matchedCity.cityID,
           }
         })
 
-        return [...state, location[0]];
+        return [...location];
 
       default: return state;
     }

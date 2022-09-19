@@ -1,22 +1,22 @@
-import { FETCH_AIRPORT_DESTINATION } from "../actions";
+import { FETCH_DEPARTURE } from "../actions";
 
 const initialState = [];
 
-const destinationAirportReducer = function(state = initialState, action) {
+const departureAirportReducer = function(state = initialState, action) {
   
   if(action.error === true) {
     alert('error, please try again');
     return state;
   } else {
     switch (action.type) {
-      case FETCH_AIRPORT_DESTINATION:
+      case FETCH_DEPARTURE:
         // console.log('action.payload' + JSON.stringify(action.payload));
         // console.log('action.payload.response' + JSON.stringify(action.payload.response));
         const citySearch = action.payload;
 
         console.log('citySearch' + citySearch)
 
-        const destination = citySearch.map((p) => {
+        const departure = citySearch.map((p) => {
           return {
             id: p.id,
             cityCode: p.cityCode,
@@ -26,13 +26,13 @@ const destinationAirportReducer = function(state = initialState, action) {
           }
         })
 
-        console.log('destination'+ JSON.stringify(destination));
+        console.log('departure'+ JSON.stringify(departure));
 
-        return [...destination];
+        return [...departure];
 
       default: return state;
     }
   }
 };
 
-export default destinationAirportReducer;
+export default departureAirportReducer;
