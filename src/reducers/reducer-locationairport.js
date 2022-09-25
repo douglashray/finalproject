@@ -10,11 +10,9 @@ const destinationAirportReducer = function(state = initialState, action) {
   } else {
     switch (action.type) {
       case FETCH_AIRPORT_DESTINATION:
-        // console.log('action.payload' + JSON.stringify(action.payload));
-        // console.log('action.payload.response' + JSON.stringify(action.payload.response));
+
         const citySearch = action.payload;
 
-        console.log('citySearch' + citySearch)
 
         const destination = citySearch.map((p) => {
           return {
@@ -26,7 +24,7 @@ const destinationAirportReducer = function(state = initialState, action) {
           }
         })
 
-        console.log('destination'+ JSON.stringify(destination));
+        // console.log('destination'+ JSON.stringify(destination[0]));
 
         return [...destination];
 

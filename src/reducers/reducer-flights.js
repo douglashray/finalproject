@@ -10,8 +10,8 @@ const flightsReducer = function(state = initialState, action) {
   } else {
     switch (action.type) {
       case FETCH_FLIGHTS:
-        console.log('action.payload' + JSON.stringify(action.payload));
-        console.log('action.payload.response' + JSON.stringify(action.payload.response));
+        // console.log('action.payload' + JSON.stringify(action.payload));
+        
         const flightSearch = action.payload;
 
         console.log('flightSearch' + JSON.stringify(flightSearch));

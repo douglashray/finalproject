@@ -5,14 +5,18 @@ import destinationAirportReducer from "./reducer-locationairport";
 import destinationHotelReducer from "./reducer-locationhotel";
 import flightsReducer from "./reducer-flights";
 import hotelsReducer from "./reducer-hotels";
+import departureAirportReducer from "./reducer-departure";
+import authenticationReducer from "./reducer-authentication";
 
 const rootReducer = combineReducers({
   team: teamReducer,
   games: gamesReducer,
-  locationAirport: destinationAirportReducer, 
-  locationHotel: destinationHotelReducer,
+  destinationAirport: destinationAirportReducer, 
+  destinationHotel: destinationHotelReducer,
   flights: flightsReducer,
-  hotels: hotelsReducer
+  hotels: hotelsReducer,
+  departure: departureAirportReducer,
+  authentication: authenticationReducer
 });
 
 export default rootReducer;

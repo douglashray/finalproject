@@ -14,13 +14,14 @@ const hotelsReducer = function(state = initialState, action) {
         // console.log('action.payload.response' + JSON.stringify(action.payload.response));
         const hotelSearch = action.payload.response;
 
-        const hotels = hotelSearch.map((p) => {
+        const hotels = hotelSearch.hotels.map((p) => {
           return {
-            id: p.fixture.id,
-            date: p.fixture.date,
-            timestamp: p.fixture.timestamp,
-            awayTeam: p.teams.away.name,
-            awayLogo: p.teams.away.logo
+            id: p.hotelId || p.pclnId,
+            name: p.name,
+            brand: p.brand,
+            img: p.thumbnailUrl,
+            starRating: p.hotels.starRating,
+            minPrice: p.ratesSummary.minPrice,
           }
         })
 

@@ -10,15 +10,17 @@ const destinationHotelReducer = function(state = initialState, action) {
   } else {
     switch (action.type) {
       case FETCH_HOTEL_DESTINATION:
-        // console.log('action.payload' + JSON.stringify(action.payload));
-        // console.log('action.payload.response' + JSON.stringify(action.payload.response));
+                
         const citySearch = action.payload;
 
-        const location = citySearch.slice(0,1).map((p) => {
+        const location = citySearch.map((p) => {
           return {
             id: p.matchedCity.cityID,
           }
         })
+
+        console.log(location);
+        console.log('location'+ JSON.stringify(location));
 
         return [...location];
 

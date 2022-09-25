@@ -2,18 +2,19 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { BrowserRouter, Switch, Route, Link, useHistory } from 'react-router-dom';
 import { Table, Button, Image, Container, Row, Col, Form } from 'react-bootstrap';
-// import styled from "styled-components";
+import styled from "styled-components";
 import React, { useEffect } from 'react';
 import { fetchTeam, fetchGames, fetchAirportDestination, fetchHotelDestination, fetchDeparture, fetchFlights  } from './actions';
 import './index.css';
+import TravelSearch from './components/travelsearch';
 // import TeamDetails from './components/teamdetails';
 
 function App () {
   const team = useSelector((state) => state.team);
   const games = useSelector((state) => state.games);
-  const destination = useSelector((state) => state.destination);
+  const destination = useSelector((state) => state.destinationAirport);
   const departure = useSelector((state) => state.departure);
-  const hotelLocation = useSelector((state) => state.location);
+  const hotelLocation = useSelector((state) => state.destinationHotel);
   const flights = useSelector((state) => state.flights);
   const hotels = useSelector((state) => state.hotels);
   const utc = new Date();
@@ -25,14 +26,15 @@ function App () {
     departureDate: '',
     returnDate: '',
     destination: '',
-
   }
   // let destinationTest = team[0].city;
-  console.log('tripDetails'+ JSON.stringify(tripDetails));
+  // console.log('tripDetails'+ JSON.stringify(tripDetails));
 
   const dispatch = useDispatch();
   
-  // console.log(destinationTest);
+  console.log('hotelLocation'+hotelLocation);
+  console.log('destination'+destination);
+  console.log('departure'+departure);
 
   // useEffect(() => {
   //   if(!tripDetails.teamId) {
@@ -65,9 +67,9 @@ function App () {
     // SearchGames(props.id, props.venueId)
     return (
       <div>
-        {/* <table>
+        <table>
           <tr>
-            <td> */}
+            <td>
               <ul>
                 <li key={props.id}>
                   <p>{props.name}</p>
@@ -80,11 +82,11 @@ function App () {
               
               {/* </p> */}
             {/* </td>
-            <td>
+            <td> */}
               
             </td>
           </tr>
-        </table> */}
+        </table>
         {/* <p>{SearchGames(props.id, props.venueId)}</p> */}
       </div>
     )
@@ -114,7 +116,7 @@ function App () {
 
   
   const displayGames = () => {
-    console.log('displayGames' + tripDetails.departureDate);
+    console.log('displayGames' + JSON.stringify(new Date(tripDetails.departureDate)));
     return games.map((p) => (
       (new Date(p.date) > new Date()) ?
       // (p.timestamp < utc) ? 
@@ -139,23 +141,23 @@ function App () {
   //   ));
   // };
   
-  const selectGame = (gameSelection) => dispatch =>{
-    console.log(selectGame);
+  const selectGame = (gameSelection) => dispatch => {
+    console.log('selectGame' + gameSelection);
+    // TravelSearch();
   }
 
   const ListGames = (props) => {
     return (
       <div>
         {/* <Link to={`/${props.id}`} onClick={() => dispatch(selectGame(props))}> */}
-        <Link to={`/${props.id}`} 
+          <tr><td key={props.id}><Link to={`/${props.id}`} onClick=
+          // {`/${props.id}`}
+          // {TravelSearch}
+          {selectGame(props.id)}
         // onClick={() => dispatch(selectGame(props))}
-        > 
-        <td key={props.id}>
-          <tr>Date: {props.date}</tr>
-          <tr>vs. {props.awayTeam}</tr>
-          <tr><img className='away-team-logo' src={props.awayLogo} alt=''/></tr>
-        </td>
-        </Link>
+        >vs. {props.awayTeam} Date: {props.date}</Link></td></tr>
+          <tr><td><img className='away-team-logo' src={props.awayLogo} alt=''/></td></tr>
+        
       </div>
     )
   };
@@ -181,14 +183,14 @@ function App () {
     tripDetails.departureDate = event.target['departure-date'].value;
     tripDetails.returnDate = event.target['return-date'].value;
 
-    console.log('tripDetails.departureDate' + tripDetails.departureDate);
+    console.log('tripDetails.departureDate' + JSON.stringify(new Date(tripDetails.departureDate)));
     console.log('tripDetails.returnDate' + tripDetails.returnDate)
 
     if(!event) {
       console.log('waiting for search');
     } else {
       dispatch(fetchTeam(tripDetails.team))
-      fetchDeparture(tripDetails.departureCity)
+      
 
       // fetchTeam(search)
       // .then(response => console.log(response))
@@ -208,73 +210,96 @@ function App () {
     }
   }
 
-  const SearchGames = () => {
-    // useEffect(() => {
-      // if(!tripDetails.teamId) {
-      //   console.log('none');
-      // } else {
-        useEffect(() => {
-      console.log('useEffect' + tripDetails.teamId + tripDetails.teamVenue);
-      dispatch(fetchGames(tripDetails.teamId, tripDetails.teamVenue))
-    //   }
-    }, []);
-    // dispatch(fetchGames(tripDetails.teamId, tripDetails.teamVenue));
-      // }, []);
-    // }
-  }
+
+  useEffect(() => {
+    const gamesSearch = async () => {
+      // console.log('gamesSearch' + JSON.stringify(tripDetails.destination));
+      // await dispatch(fetchDeparture(tripDetails.departureCity));
+      await dispatch(fetchGames(tripDetails.teamId, tripDetails.teamVenue));
+      // await dispatch(fetchAirportDestination(tripDetails.destination));
+      
+      // await data.json(data);
+    }
+
+    gamesSearch()
+    .catch(console.error);
+  }, [team]);
+
+  useEffect(() => {
+    const hotelSearch = async () => {
+      // console.log('hotelSearch' + JSON.stringify(destination));
+      await dispatch(fetchHotelDestination(destination[0].longitude, destination[0].latitude));
+    }
+
+    hotelSearch()
+      .catch(console.error);
+  }, [destination]);
+
 
   return (
     <Container>
-    <div className='main'>
-      <table className='main-table'>
-        <tr>
-          <td colSpan={2}>
-            <div className='search'>
-              <p>Search your Favorite Team</p>
+      <Main>
+        <div className='main'>
+          <table className='main-table'>
+            <tr>
+              <td>
+                
+                  <p>Search your Favorite Team</p>
+                  
+                  <form onSubmit={searchTeam}>
+                    <label htmlFor="query">Favorite Team:&nbsp;</label>
+                    <input className='query' name='query'></input>
+                    &nbsp;
+                    <label htmlFor="departure-city">Departure City:&nbsp;</label>
+                    <input className='departure-city' name='departure-city'></input>
+                    &nbsp;
+                    <label htmlFor="departure-date">Departure Date:&nbsp;</label>
+                    <input className='departure-date' name='departure-date' type='date'></input>
+                    &nbsp;
+                    <label htmlFor="return-date">Return Date:&nbsp;</label>
+                    <input className='return-date' name='return-date' type='date'></input>
+                    &nbsp;
+                    <button className='btn btn-secondary' type='submit'>Search</button>
+                  </form>
+                
+              </td>
+            </tr>
+            <tr>
               
-              <form onSubmit={searchTeam}>
-                <label for="query">Favorite Team: </label>
-                <input className='query' name='query'></input>
-                &nbsp;
-                <label for="departure-city">Departure City: </label>
-                <input className='departure-city' name='departure-city'></input>
-                &nbsp;
-                <label for="departure-date">Departure Date: </label>
-                <input className='departure-date' name='departure-date' type='date'></input>
-                &nbsp;
-                <label for="return-date">Return Date: </label>
-                <input className='return-date' name='return-date' type='date'></input>
-                &nbsp;
-                <button className='btn btn-secondary' type='submit'>Search</button>
-              </form>
+              <td>
+                {/* {SearchGames(tripDetails)} */}
+                {displayTeam(team)}
+                {/* {TeamDetails} */}
+                </td>      
               
-            </div>
-          </td>
-          
-        </tr>
-        <tr>
-          <div className='display'>
-          <td>
-            {/* {SearchGames(tripDetails)} */}
-            {displayTeam(team)}
-            {/* {TeamDetails} */}
-            </td>      
-          </div>
-        </tr>
-        <tr>
-          <td>
-          <div className='games'>
-            <table>
-            {displayGames(games)}
-            </table>
-          </div>
-          </td>
-        </tr>
-      </table>
-    </div>
+            </tr>
+            <tr>
+              <td>
+              
+                <table>
+                {displayGames(games)}
+                
+                </table>
+              
+              </td>
+            </tr>
+          </table>
+        </div>
+      </Main>
     </Container>
   )
 
 }
 
 export default App;
+
+const Main = styled.div`
+padding-top: 90px;
+display: fixed;
+flex-direction: row;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  padding: 2em;
+  margin: 0 auto;
+
+`;
