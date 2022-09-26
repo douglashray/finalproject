@@ -5,6 +5,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  padding: 0;
 }
 
 code {
@@ -42,4 +43,8 @@ thead th:nth-child(4) {
 th,
 td {
   padding: 20px;
+}
+
+nav {
+  margin: 0 auto;
 }

@@ -12,7 +12,8 @@ const userSchema = Yup.object().shape({
   password: Yup.string().required()
 });
 
-const Login = () => {
+const Login = (props) => {
+  console.log('login');
   const { register, handleSubmit, errors } = useForm({
     resolver: yupResolver(userSchema)
   });
@@ -28,7 +29,7 @@ const Login = () => {
   };
 
   return (
-    // <Login>
+    <Form>
     <form onSubmit={handleSubmit(handleForm)}>
       <div className='form-group'>
         <label>
@@ -36,19 +37,31 @@ const Login = () => {
         </label>
         <input 
         className='form-control'
-        name='email' ref={register({ required: true })}></input>
+        name='email' {...register('email', { required: true })}></input>
         {/* {errors.email?.message} */}
       </div>
       <div className='form-group'>
         <label>Password</label>
         <input 
         className='form-control'
-        name='password' ref={register({ required: true })}></input>
+        name='password' {...register('password', { required: true })}></input>
         {/* {errors.password?.message} */}
       </div>
+      <button className='btn btn-secondary' type='Submit'>Login</button>
     </form>
-    // </Login>
+    </Form>
   )
 };
 
 export default Login;
+
+const Form = styled.div`
+display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  padding: 2em;
+  margin: 0 auto;
+  padding-top: 100px;
+
+`;

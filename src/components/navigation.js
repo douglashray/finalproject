@@ -31,8 +31,18 @@ const Nav = () => {
     } else {
       return (
         <>
-          <li><Link to="/signup">Sign Up</Link></li>
-          <li><Link to="/login">Log In</Link></li>
+          {/* <li>
+          <NavLink
+    className={({ isActive }) =>
+      isActive ? "active nav-link" : "nav-link"
+    }
+    to="/signup"
+    >
+    About
+   </NavLink></li> */}
+   <li>
+   <Link to='/signup'>Sign Up</Link></li>
+          <li><Link to='/login'>Log In</Link></li>
         </>
       );
     }
@@ -41,8 +51,17 @@ const Nav = () => {
 
   return (
     <NavContainer>
-      <div>Navigation</div>
       <NavLinks>
+      <NavLink
+    className={({ isActive }) =>
+      isActive ? "active nav-link" : "nav-link"
+    }
+    aria-current="page"
+    to="/"
+   >
+    Home
+   </NavLink> 
+      
         {renderNav()}
       </NavLinks>
     </NavContainer>
@@ -52,24 +71,32 @@ const Nav = () => {
 export default Nav;
 
 const NavContainer = styled.div`
-  position: fixed;
-  z-index: 999;
-  background: rgb(0, 255, 255);
-  color: whitesmoke;
-  margin: 0;
-  width: 100%;
-  height: 50px;
-  padding: 1.5em;
-  a {
-    color: #000;
-  }
+position: fixed;
+z-index: 999;
+background: hsl(0, 0%, 13%);
+color: whitesmoke;
+margin: 0;
+width: 100%;
+height: auto;
+padding: 1.5em;
+#logo {
+  position: relative;
+  float: left;
+  width: 150px;
+  height: auto;
+}
+a {
+  color: #fff;
+}
 `;
 
 const NavLinks = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  list-style: none;
+display: flex;
+flex-direction: row;
+justify-content: flex-end;
+list-style: none;
+li: display: inline-block;
+}
 `;
 
 const LogOutButton = styled.div`

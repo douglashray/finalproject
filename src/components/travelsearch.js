@@ -6,7 +6,7 @@ import { fetchTeam, fetchGames, fetchAirportDestination, fetchHotelDestination, 
 import '../index.css';
 // import TeamDetails from './components/teamdetails';
 
-const TravelSearch = props => {
+const TravelSearch = (props) => {
   console.log('travelsearch fired');
 
   const team = useSelector((state) => state.team);
