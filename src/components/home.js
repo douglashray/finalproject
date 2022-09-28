@@ -117,6 +117,7 @@ const Home = (props) => {
   const displayGames = () => {
     console.log('displayGames' + JSON.stringify(new Date(tripDetails.departureDate)));
     return games.map((p) => (
+      
       (new Date(p.date) > new Date()) ?
       // (p.timestamp < utc) ? 
         // console.log(p.id) :
@@ -128,6 +129,8 @@ const Home = (props) => {
       awayLogo = {p.awayLogo}
       /> : console.log(p.id) 
     ));
+      
+
   };
 
   // const destinationLocation = () => {
@@ -140,10 +143,6 @@ const Home = (props) => {
   //   ));
   // };
   
-  const selectGame = (gameSelection) => dispatch => {
-    console.log('selectGame' + gameSelection);
-    // TravelSearch();
-  }
 
   const ListGames = (props) => {
     return (
@@ -152,13 +151,14 @@ const Home = (props) => {
           <td>
             <ul>
               <li key={props.id}>
-                <Link to={`/${props.id}`} onClick=
-                {selectGame(props.id)}
+                <Link to={`/${props.id}`} 
+                state={{ from: "games" }}
+                // onClick= {selectGame(props.id)}
                 // onClick={() => dispatch(selectGame(props))}
                 >
                 <p>vs. {props.awayTeam}</p>
                 <p> Date: {props.date}</p></Link>
-                <p><img className='away-team-logo' src={props.awayLogo} alt=''/></p>
+                <p /><img className='away-team-logo' src={props.awayLogo} alt=''/>
               </li>
             </ul>
           </td> 
@@ -253,16 +253,16 @@ const Home = (props) => {
                   
                   <form onSubmit={searchTeam}>
                     <label htmlFor="query">Favorite Team:&nbsp;</label>
-                    <input className='query' name='query'></input>
+                    <input className='query' name='query' />
                     &nbsp;
                     <label htmlFor="departure-city">Departure City:&nbsp;</label>
-                    <input className='departure-city' name='departure-city'></input>
+                    <input className='departure-city' name='departure-city'/>
                     &nbsp;
                     <label htmlFor="departure-date">Departure Date:&nbsp;</label>
-                    <input className='departure-date' name='departure-date' type='date'></input>
+                    <input className='departure-date' name='departure-date' type='date'/>
                     &nbsp;
                     <label htmlFor="return-date">Return Date:&nbsp;</label>
-                    <input className='return-date' name='return-date' type='date'></input>
+                    <input className='return-date' name='return-date' type='date'/>
                     &nbsp;
                     <button className='btn btn-secondary' type='submit'>Search</button>
                   </form>

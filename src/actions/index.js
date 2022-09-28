@@ -250,7 +250,7 @@ export const fetchFlights = () => async dispatch => {
 };
 
 export const signup = (form, callback) => dispatch => {
-  axios.post('/signup', form)
+  axios.post('http://localhost:3000/signup', form)
     .then(function(response) {
       dispatch({ type: AUTHENTICATION_USER, payload: response.data });
       localStorage.setItem('token', response.data.token);
@@ -262,7 +262,7 @@ export const signup = (form, callback) => dispatch => {
 };
 
 export const login = (form, callback) => dispatch => {
-  axios.post('/login', form)
+  axios.post('http://localhost:3000/login', form)
     .then(function(response) {
       dispatch({ type: AUTHENTICATION_USER, payload: response.data });
       localStorage.setItem('token', response.data.token);
