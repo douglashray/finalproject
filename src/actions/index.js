@@ -104,7 +104,7 @@ const options = {
 // const request = await
 await
   axios.request(options).then(function (response) {
-    // console.log('fetchAirportDestination' + JSON.stringify(response.data));
+    console.log('fetchAirportDestination' + JSON.stringify(response.data));
     // return response.data;
     dispatch({
       type: FETCH_AIRPORT_DESTINATION,
@@ -136,7 +136,7 @@ export const fetchDeparture = (city) => async dispatch => {
   // const request = 
   await
     axios.request(options).then(function (response) {
-      console.log('fetchDeparture' + JSON.stringify(response.data));
+      // console.log('fetchDeparture' + JSON.stringify(response.data));
       // return response.data;
       dispatch({
         type: FETCH_DEPARTURE,
@@ -215,7 +215,7 @@ export const fetchHotels = (stayDetails) => async dispatch => {
     });
 };
 
-export const fetchFlights = () => async dispatch => {
+export const fetchFlights = (departure, destination, date_departure, date_departure_return) => async dispatch => {
   console.log('fetchFlights' + JSON.stringify());
   const options = {
     method: 'GET',
@@ -223,16 +223,16 @@ export const fetchFlights = () => async dispatch => {
     params: {
       itinerary_type: 'ROUND_TRIP',
       class_type: 'ECO',
-      location_arrival: 'LHR',
-      date_departure: '2022-11-15',
-      location_departure: 'DEN',
+      location_arrival: destination,
+      date_departure: date_departure,
+      location_departure: departure,
       sort_order: 'PRICE',
       number_of_stops: '1',
       price_max: '20000',
       number_of_passengers: '1',
       duration_max: '2051',
       price_min: '100',
-      date_departure_return: '2022-11-17'
+      date_departure_return: date_departure_return
     },
     headers: {
       'X-RapidAPI-Key': '5e85bc9967mshd77583dcb698abfp19a727jsn9b804fd5116d',

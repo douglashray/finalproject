@@ -26,7 +26,7 @@ const departureAirportReducer = function(state = initialState, action) {
           }
         })
 
-        console.log('departure'+ JSON.stringify(departure));
+        // console.log('departure'+ JSON.stringify(departure));
 
         return [...departure];
 

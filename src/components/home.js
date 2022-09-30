@@ -3,18 +3,18 @@ import { useDispatch, useSelector } from 'react-redux';
 import { BrowserRouter, Switch, Route, Link, useHistory, Routes } from 'react-router-dom';
 import { Table, Button, Image, Container, Row, Col, Form } from 'react-bootstrap';
 import styled from "styled-components";
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { fetchTeam, fetchGames, fetchAirportDestination, fetchHotelDestination, fetchDeparture, fetchFlights  } from '../actions';
 
 const Home = (props) => {
   const team = useSelector((state) => state.team);
   const games = useSelector((state) => state.games);
   const destination = useSelector((state) => state.destinationAirport);
-  const departure = useSelector((state) => state.departure);
-  const hotelLocation = useSelector((state) => state.destinationHotel);
-  const flights = useSelector((state) => state.flights);
-  const hotels = useSelector((state) => state.hotels);
-  const utc = new Date();
+  // const departure = useSelector((state) => state.departure);
+  // const hotelLocation = useSelector((state) => state.destinationHotel);
+  // const flights = useSelector((state) => state.flights);
+  // const hotels = useSelector((state) => state.hotels);
+  // const utc = new Date();
   const tripDetails = {
     team: '',
     teamId: '',
@@ -29,9 +29,9 @@ const Home = (props) => {
 
   const dispatch = useDispatch();
   
-  console.log('hotelLocation'+hotelLocation);
-  console.log('destination'+destination);
-  console.log('departure'+departure);
+  // console.log('hotelLocation'+hotelLocation);
+  console.log('destination'+ destination);
+  // console.log('departure'+departure);
 
  
 
@@ -115,7 +115,7 @@ const Home = (props) => {
 
   
   const displayGames = () => {
-    console.log('displayGames' + JSON.stringify(new Date(tripDetails.departureDate)));
+    console.log('displayGames' + JSON.stringify(games));
     return games.map((p) => (
       
       (new Date(p.date) > new Date()) ?
@@ -184,18 +184,19 @@ const Home = (props) => {
     event.preventDefault();
 
     tripDetails.team = event.target['query'].value;
-    tripDetails.departureCity = event.target['departure-city'].value;
-    tripDetails.departureDate = event.target['departure-date'].value;
-    tripDetails.returnDate = event.target['return-date'].value;
+    // tripDetails.departureCity = event.target['departure-city'].value;
+    // tripDetails.departureDate = event.target['departure-date'].value;
+    // tripDetails.returnDate = event.target['return-date'].value;
 
-    console.log('tripDetails.departureDate' + JSON.stringify(new Date(tripDetails.departureDate)));
-    console.log('tripDetails.returnDate' + tripDetails.returnDate)
+    // console.log('tripDetails.departureDate' + JSON.stringify(new Date(tripDetails.departureDate)));
+    // console.log('tripDetails.returnDate' + tripDetails.returnDate)
 
     if(!event) {
       console.log('waiting for search');
     } else {
       dispatch(fetchTeam(tripDetails.team))
       
+      // dispatch(fetchDeparture(tripDetails.departureCity));
 
       // fetchTeam(search)
       // .then(response => console.log(response))
@@ -215,30 +216,35 @@ const Home = (props) => {
     }
   }
 
+  const isInitialMount = useRef(true);
 
   useEffect(() => {
     const gamesSearch = async () => {
-      // console.log('gamesSearch' + JSON.stringify(tripDetails.destination));
-      // await dispatch(fetchDeparture(tripDetails.departureCity));
-      await dispatch(fetchGames(tripDetails.teamId, tripDetails.teamVenue));
-      // await dispatch(fetchAirportDestination(tripDetails.destination));
+      if (isInitialMount.current) {
+        isInitialMount.current = false;
+      } else {
       
+      // console.log('gamesSearch' + JSON.stringify(tripDetails.destination));
+      
+      await dispatch(fetchGames(tripDetails.teamId, tripDetails.teamVenue));
+      await dispatch(fetchAirportDestination(tripDetails.destination));
       // await data.json(data);
+      }
     }
 
     gamesSearch()
     .catch(console.error);
   }, [team]);
 
-  useEffect(() => {
-    const hotelSearch = async () => {
-      console.log('hotelSearch' + JSON.stringify(destination));
-      // await dispatch(fetchHotelDestination(destination[0].longitude, destination[0].latitude));
-    }
+  // useEffect(() => {
+  //   const hotelSearch = async () => {
+  //     console.log('hotelSearch' + JSON.stringify(destination));
+  //     // await dispatch(fetchHotelDestination(destination[0].longitude, destination[0].latitude));
+  //   }
 
-    hotelSearch()
-      .catch(console.error);
-  }, [destination]);
+  //   hotelSearch()
+  //     .catch(console.error);
+  // }, [destination]);
 
 
   return (
@@ -255,7 +261,7 @@ const Home = (props) => {
                     <label htmlFor="query">Favorite Team:&nbsp;</label>
                     <input className='query' name='query' />
                     &nbsp;
-                    <label htmlFor="departure-city">Departure City:&nbsp;</label>
+                    {/* <label htmlFor="departure-city">Departure City:&nbsp;</label>
                     <input className='departure-city' name='departure-city'/>
                     &nbsp;
                     <label htmlFor="departure-date">Departure Date:&nbsp;</label>
@@ -263,7 +269,7 @@ const Home = (props) => {
                     &nbsp;
                     <label htmlFor="return-date">Return Date:&nbsp;</label>
                     <input className='return-date' name='return-date' type='date'/>
-                    &nbsp;
+                    &nbsp; */}
                     <button className='btn btn-secondary' type='submit'>Search</button>
                   </form>
                 
