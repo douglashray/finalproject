@@ -67,6 +67,7 @@ const Home = (props) => {
     return (
       <div>
         <table>
+          <tbody>
           <tr>
             <td>
               <ul>
@@ -85,6 +86,7 @@ const Home = (props) => {
               
             </td>
           </tr>
+          </tbody>
         </table>
         {/* <p>{SearchGames(props.id, props.venueId)}</p> */}
       </div>
@@ -115,7 +117,7 @@ const Home = (props) => {
 
   
   const displayGames = () => {
-    console.log('displayGames' + JSON.stringify(games));
+    // console.log('displayGames' + JSON.stringify(games));
     return games.map((p) => (
       
       (new Date(p.date) > new Date()) ?
@@ -127,7 +129,7 @@ const Home = (props) => {
       date = {p.date}
       awayTeam = {p.awayTeam}
       awayLogo = {p.awayLogo}
-      /> : console.log(p.id) 
+      /> : null 
     ));
       
 
@@ -147,6 +149,7 @@ const Home = (props) => {
   const ListGames = (props) => {
     return (
       <table>
+        <tbody>
         <tr>
           <td>
             <ul>
@@ -163,6 +166,7 @@ const Home = (props) => {
             </ul>
           </td> 
         </tr>
+        </tbody>
       </table> 
     )
   };
@@ -252,6 +256,7 @@ const Home = (props) => {
       <Main>
         <div className='main'>
           <table className='main-table'>
+            <tbody>
             <tr>
               <td>
                 
@@ -294,6 +299,7 @@ const Home = (props) => {
               
               </td>
             </tr>
+            </tbody>
           </table>
         </div>
       </Main>

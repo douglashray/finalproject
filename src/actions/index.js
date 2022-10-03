@@ -186,22 +186,22 @@ export const fetchHotelDestination = (lon, lat) => async dispatch => {
   
 };
 
-export const fetchHotels = (stayDetails) => async dispatch => {
-  console.log('fetchHotels' + JSON.stringify(stayDetails));
+export const fetchHotels = (id, checkin, checkout) => async dispatch => {
+  // console.log('fetchHotels' + JSON.stringify(stayDetails));
     const options = {
       method: 'GET',
       url: 'https://priceline-com-provider.p.rapidapi.com/v1/hotels/search',
       params: {
         sort_order: 'HDR',
-        location_id: '3000035825',
-        date_checkout: '2022-11-16',
-        date_checkin: '2022-11-15',
+        location_id: id,
+        date_checkout: checkin,
+        date_checkin: checkout,
         star_rating_ids: '3.5,4.0,4.5',
         rooms_number: '1',
         amenities_ids: 'FINTRNT,FBRKFST'
       },
       headers: {
-        'X-RapidAPI-Key': '5e85bc9967mshd77583dcb698abfp19a727jsn9b804fd5116d',
+        'X-RapidAPI-Key': process.env.REACT_APP_RAPID_API_KEY,
         'X-RapidAPI-Host': 'priceline-com-provider.p.rapidapi.com'
       }
     };
@@ -235,12 +235,12 @@ export const fetchFlights = (departure, destination, date_departure, date_depart
       date_departure_return: date_departure_return
     },
     headers: {
-      'X-RapidAPI-Key': '5e85bc9967mshd77583dcb698abfp19a727jsn9b804fd5116d',
+      'X-RapidAPI-Key': process.env.REACT_APP_RAPID_API_KEY,
       'X-RapidAPI-Host': 'priceline-com-provider.p.rapidapi.com'
     }
   };
   await axios.request(options).then(function (response) {
-    console.log('fetchHotels' + JSON.stringify(response.data.segment));
+    // console.log('fetchHotels' + JSON.stringify(response.data.segment));
     
     dispatch({type: FETCH_FLIGHTS,
       payload: response.data.segment});

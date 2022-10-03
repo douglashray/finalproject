@@ -3,7 +3,7 @@ import styled from "styled-components";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Table, Button, Image, Container, Row, Col, Form } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchTeam, fetchGames, fetchAirportDestination, fetchHotelDestination, fetchDeparture, fetchFlights  } from '../actions';
+import { fetchTeam, fetchGames, fetchAirportDestination, fetchHotelDestination, fetchDeparture, fetchFlights, fetchHotels  } from '../actions';
 import { useParams, useLocation } from "react-router-dom";
 import '../index.css';
 // import TeamDetails from './components/teamdetails';
@@ -17,12 +17,11 @@ const TravelSearch = (props) => {
     teamId: '',
     teamVenue: '',
     departureCity: '',
-    departureDate: '',
-    returnDate: '',
+    departureDate: '2022-10-05',
+    returnDate: '2022-10-20',
     destination: '',
   }
   
-
   const team = useSelector((state) => state.team);
   const games = useSelector((state) => state.games);
   const destination = useSelector((state) => state.destinationAirport);
@@ -32,6 +31,8 @@ const TravelSearch = (props) => {
   const hotels = useSelector((state) => state.hotels);
   const game = useSelector(state => state.games.entries);
 
+  const isInitialMount = useRef(true);
+
   // const game = games.get(parseInt(props.match.params.id, 10));
 
   const dispatch = useDispatch();
@@ -40,30 +41,39 @@ const TravelSearch = (props) => {
   // const { from } = location.state;
 
   // console.log('from'+ JSON.stringify(from));
-  console.log('team'+ JSON.stringify(team));
+  // console.log('team'+ JSON.stringify(team));
   console.log('destination'+ JSON.stringify(destination[0]));
   console.log('departure'+ JSON.stringify(departure));
   console.log('flights'+ JSON.stringify(flights));
   console.log('hotelLocation'+ JSON.stringify(hotelLocation));
   console.log('hotels'+ JSON.stringify(hotels));
  
-  function find(games) {
-    return games.id === id;
-  }
+  // function find(games) {
+  //   return games.id === id;
+  // }
 
-  console.log(games.find(find));
+  // console.log(games.find(find));
   const result = games.find(theId => theId.id === parseInt(id));
-  console.log('result' + JSON.stringify(result));
+  // console.log('result' + JSON.stringify(result));
 
-  const searchAccomodations = (event) => {
-    console.log(event);
+
+
+  
+
+  const searchAccommodations = (event) => {
+    // console.log('searchAccomodations.event' + event);
     event.preventDefault();
-    tripDetails.departureCity = event.target['departure-city'].value;
-    tripDetails.departureDate = event.target['departure-date'].value;
-    tripDetails.returnDate = event.target['return-date'].value;
 
-    console.log('tripDetails.departureDate' + tripDetails.departureDate);
-    console.log('tripDetails.returnDate' + tripDetails.returnDate);
+    // let addDetails = { ...tripDetails}
+    
+    tripDetails.departureCity = event.target['departure-city'].value || '';
+    tripDetails.departureDate = event.target['departure-date'].value || '';
+    tripDetails.returnDate = event.target['return-date'].value || '';
+
+    console.log('searchAccomodations.tripDetails' + JSON.stringify(tripDetails));
+
+    // console.log('destination[0].longitude, destination[0].latitude' + destination[0].longitude, destination[0].latitude)
+    
     // const departurecity = event.getElementById['departure'].value;
     const departurecity = 'denver';
 
@@ -71,52 +81,64 @@ const TravelSearch = (props) => {
       console.log('waiting for search');
     } else {   
       dispatch(fetchDeparture(tripDetails.departureCity))
-
+      dispatch(fetchHotelDestination(destination[0].longitude, destination[0].latitude));
       // dispatch(fetchFlights())
     }
   }
   
-  const isInitialMount = useRef(true);
-
   useEffect(() => {
-    const hotelSearch = async () => {
+    console.log('useEffect.tripDetails' + JSON.stringify(tripDetails));
+    const accommodationSearch = async () => {
     if (isInitialMount.current) {
       isInitialMount.current = false;
     } else {
-    
+      console.log('hotelLocation.id' + hotelLocation);
       console.log('hotelSearchtripDetails.departureDate' + tripDetails.departureDate);
     console.log('hotelSearchtripDetails.returnDate' + tripDetails.returnDate);
-      // console.log('hotelSearch' + JSON.stringify(departure));
-      // await dispatch(fetchHotelDestination(destination[0].longitude, destination[0].latitude));
+
+      console.log('hotelSearch' + JSON.stringify(departure));
+      await dispatch(fetchHotels(hotelLocation[0].id, tripDetails.departureDate, tripDetails.returnDate));
       await dispatch(fetchFlights(departure[0].cityCode, destination[0].cityCode, tripDetails.departureDate, tripDetails.returnDate))
     }
     }
 
-    hotelSearch()
+    accommodationSearch()
       .catch(console.error);
   }, [departure]);
 
-  const searchForm = () => {
-    return(
-  <form onSubmit={searchAccomodations}>
-                    <label htmlFor="departure-city">Departure City:&nbsp;</label>
-                    <input className='departure-city' name='departure-city'/>
-                    &nbsp;
-                    <label htmlFor="departure-date">Departure Date:&nbsp;</label>
-                    <input className='departure-date' name='departure-date' type='date'/>
-                    &nbsp;
-                    <label htmlFor="return-date">Return Date:&nbsp;</label>
-                    <input className='return-date' name='return-date' type='date'/>
-                    &nbsp;
-                    <button className='btn btn-secondary' type='submit'>Search</button>
-                  </form>
-    )}
+  const flightComponents = flights.map((p) => {
+    // const flight = flights[id];
+
+    // return <Flight 
+    //   id={p.flightNumber} 
+    //   flightNum = {p.flightNumber} 
+    //   /> 
+    return (
+      <table>
+        <tbody>
+        <tr>
+          <td>
+            <ul>
+              <li key={p.flightNumber}>
+                <p>Flight: {p.flightNumber}</p>
+                <p>Departure: {p.departure}</p>
+                <p>Return: {p.arrival}</p>
+              </li>
+            </ul>
+          </td> 
+        </tr>
+        </tbody>
+      </table> 
+    )
+
+
+  })
 
   return (
     <Container>
     <Main>
     <div className='main'>
-      <p><p>Match Day: {result.date}</p></p>
+      <p>Match Day: {result.date}</p>
       <table className='main-table'>
         <tr>
           <td>
@@ -130,7 +152,7 @@ const TravelSearch = (props) => {
               <p>{result.awayTeam}</p>
             </div>
           </td>
-          <td><form onSubmit={searchAccomodations}>
+          <td><form onSubmit={searchAccommodations}>
                     <label htmlFor="departure-city">Departure City:&nbsp;</label>
                     <input className='departure-city' name='departure-city'/>
                     &nbsp;
@@ -146,6 +168,9 @@ const TravelSearch = (props) => {
         </tr>
       </table>
     </div>
+    <div className="flights">
+      {flightComponents}
+    </div>
     </Main>
     </Container>
   )
@@ -154,6 +179,17 @@ const TravelSearch = (props) => {
 export default TravelSearch;
 
 const Main = styled.div`
+display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  padding: 2em;
+  margin: 0 auto;
+  padding-top: 100px;
+
+`;
+
+const Flight = styled.div`
 display: flex;
   flex-direction: row;
   justify-content: space-around;

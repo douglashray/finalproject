@@ -18,6 +18,7 @@ const flightsReducer = function(state = initialState, action) {
 
         const flights = flightSearch.map((p) => {
           return {
+            id: p.flightNumber,
             flightNumber: p.flightNumber,
             arrival: p.arrivalDateTime,
             departure: p.departDateTime,

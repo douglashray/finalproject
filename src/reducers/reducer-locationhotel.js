@@ -13,16 +13,19 @@ const destinationHotelReducer = function(state = initialState, action) {
                 
         const citySearch = action.payload;
 
-        const location = citySearch.map((p) => {
-          return {
-            id: p.matchedCity.cityID,
-          }
-        })
+        console.log('destinationHotelReducer'+ JSON.stringify(citySearch));
 
+        const location = { 
+        // .map((p) => {
+          // return {
+            id: citySearch.matchedCity.cityID,
+          }
+        // })
+        // }
         console.log(location);
         console.log('location'+ JSON.stringify(location));
 
-        return [...location];
+        return [location];
 
       default: return state;
     }
