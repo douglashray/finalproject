@@ -104,7 +104,7 @@ const options = {
 // const request = await
 await
   axios.request(options).then(function (response) {
-    console.log('fetchAirportDestination' + JSON.stringify(response.data));
+    // console.log('fetchAirportDestination' + JSON.stringify(response.data));
     // return response.data;
     dispatch({
       type: FETCH_AIRPORT_DESTINATION,
@@ -194,8 +194,8 @@ export const fetchHotels = (id, checkin, checkout) => async dispatch => {
       params: {
         sort_order: 'HDR',
         location_id: id,
-        date_checkout: checkin,
-        date_checkin: checkout,
+        date_checkout: checkout,
+        date_checkin: checkin,
         star_rating_ids: '3.5,4.0,4.5',
         rooms_number: '1',
         amenities_ids: 'FINTRNT,FBRKFST'
@@ -205,6 +205,9 @@ export const fetchHotels = (id, checkin, checkout) => async dispatch => {
         'X-RapidAPI-Host': 'priceline-com-provider.p.rapidapi.com'
       }
     };
+
+    console.log('options' + options)
+    console.log('options' + JSON.stringify(options))
   
     await axios.request(options).then(function (response) {
       
@@ -216,7 +219,7 @@ export const fetchHotels = (id, checkin, checkout) => async dispatch => {
 };
 
 export const fetchFlights = (departure, destination, date_departure, date_departure_return) => async dispatch => {
-  console.log('fetchFlights' + JSON.stringify());
+  // console.log('fetchFlights' + JSON.stringify());
   const options = {
     method: 'GET',
     url: 'https://priceline-com-provider.p.rapidapi.com/v1/flights/search',
@@ -240,10 +243,12 @@ export const fetchFlights = (departure, destination, date_departure, date_depart
     }
   };
   await axios.request(options).then(function (response) {
-    // console.log('fetchHotels' + JSON.stringify(response.data.segment));
+    // console.log('fetchFlights.segment' + JSON.stringify(response.data.segment));
+
+    // console.log('fetchFlights.slice' + JSON.stringify(response.data.slice));
     
     dispatch({type: FETCH_FLIGHTS,
-      payload: response.data.segment});
+      payload: response.data});
   }).catch(function (error) {
     console.error(error);
   });

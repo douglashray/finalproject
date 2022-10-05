@@ -29,9 +29,10 @@ const TravelSearch = (props) => {
   const hotelLocation = useSelector((state) => state.destinationHotel);
   const flights = useSelector((state) => state.flights);
   const hotels = useSelector((state) => state.hotels);
-  const game = useSelector(state => state.games.entries);
+  // const game = useSelector(state => state.games.entries);
 
   const isInitialMount = useRef(true);
+  const isInitialMountOne = useRef(true);
 
   // const game = games.get(parseInt(props.match.params.id, 10));
 
@@ -44,7 +45,7 @@ const TravelSearch = (props) => {
   // console.log('team'+ JSON.stringify(team));
   console.log('destination'+ JSON.stringify(destination[0]));
   console.log('departure'+ JSON.stringify(departure));
-  console.log('flights'+ JSON.stringify(flights));
+  // console.log('flights'+ JSON.stringify(flights));
   console.log('hotelLocation'+ JSON.stringify(hotelLocation));
   console.log('hotels'+ JSON.stringify(hotels));
  
@@ -56,19 +57,15 @@ const TravelSearch = (props) => {
   const result = games.find(theId => theId.id === parseInt(id));
   // console.log('result' + JSON.stringify(result));
 
-
-
-  
-
   const searchAccommodations = (event) => {
     // console.log('searchAccomodations.event' + event);
     event.preventDefault();
 
     // let addDetails = { ...tripDetails}
     
-    tripDetails.departureCity = event.target['departure-city'].value || '';
-    tripDetails.departureDate = event.target['departure-date'].value || '';
-    tripDetails.returnDate = event.target['return-date'].value || '';
+    tripDetails.departureCity = event.target['departure-city'].value;
+    tripDetails.departureDate = event.target['departure-date'].value;
+    tripDetails.returnDate = event.target['return-date'].value;
 
     console.log('searchAccomodations.tripDetails' + JSON.stringify(tripDetails));
 
@@ -80,11 +77,24 @@ const TravelSearch = (props) => {
     if(!event) {
       console.log('waiting for search');
     } else {   
+      
       dispatch(fetchDeparture(tripDetails.departureCity))
-      dispatch(fetchHotelDestination(destination[0].longitude, destination[0].latitude));
       // dispatch(fetchFlights())
     }
   }
+
+  useEffect(() => {
+    // const hotelDestination = async () => {
+    //   if (isInitialMountOne.current) {
+    //     isInitialMountOne.current = false;
+    //   } else {
+      dispatch(fetchHotelDestination(destination[0].longitude, destination[0].latitude));
+    //   }
+    // }
+  
+    //   hotelDestination()
+    //     .catch(console.error);
+    }, []);
   
   useEffect(() => {
     console.log('useEffect.tripDetails' + JSON.stringify(tripDetails));
@@ -96,8 +106,10 @@ const TravelSearch = (props) => {
       console.log('hotelSearchtripDetails.departureDate' + tripDetails.departureDate);
     console.log('hotelSearchtripDetails.returnDate' + tripDetails.returnDate);
 
-      console.log('hotelSearch' + JSON.stringify(departure));
+      // console.log('hotelSearch' + JSON.stringify(departure));
       await dispatch(fetchHotels(hotelLocation[0].id, tripDetails.departureDate, tripDetails.returnDate));
+
+      // Freeze while sortin
       await dispatch(fetchFlights(departure[0].cityCode, destination[0].cityCode, tripDetails.departureDate, tripDetails.returnDate))
     }
     }
@@ -107,6 +119,11 @@ const TravelSearch = (props) => {
   }, [departure]);
 
   const flightComponents = flights.map((p) => {
+    // if(p.airline === 'UA') {
+    //   const airlineName = 'United';
+    // }
+
+    if(p.airline === 'UA' || 'AA' || 'DL') {
     // const flight = flights[id];
 
     // return <Flight 
@@ -120,9 +137,11 @@ const TravelSearch = (props) => {
           <td>
             <ul>
               <li key={p.flightNumber}>
-                <p>Flight: {p.flightNumber}</p>
+                {/* <p>Flight: {p.flightNumber}</p>
                 <p>Departure: {p.departure}</p>
-                <p>Return: {p.arrival}</p>
+                <p>Return: {p.arrival}</p> */}
+                <p>Airline: {p.airline}</p>
+                <p>Price: {p.price}</p>
               </li>
             </ul>
           </td> 
@@ -130,8 +149,28 @@ const TravelSearch = (props) => {
         </tbody>
       </table> 
     )
+    } 
+  })
 
-
+  const hotelComponents = hotels.map((p) => {
+    return (
+      <table>
+        <tbody>
+        <tr>
+          <td>
+            <ul>
+              <li key={p.id}>
+                <p>Hotel: {p.name}</p>
+                <p>Price: {p.minPrice}</p>
+                <p>Rating: {p.starRating}</p>
+                <p><img src={p.img} /> </p>
+              </li>
+            </ul>
+          </td> 
+        </tr>
+        </tbody>
+      </table> 
+    )
   })
 
   return (
@@ -171,6 +210,7 @@ const TravelSearch = (props) => {
     <div className="flights">
       {flightComponents}
     </div>
+    <div className="hotels">{hotelComponents}</div>
     </Main>
     </Container>
   )

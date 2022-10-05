@@ -13,7 +13,7 @@ const destinationHotelReducer = function(state = initialState, action) {
                 
         const citySearch = action.payload;
 
-        console.log('destinationHotelReducer'+ JSON.stringify(citySearch));
+        // console.log('destinationHotelReducer'+ JSON.stringify(citySearch));
 
         const location = { 
         // .map((p) => {
@@ -22,8 +22,8 @@ const destinationHotelReducer = function(state = initialState, action) {
           }
         // })
         // }
-        console.log(location);
-        console.log('location'+ JSON.stringify(location));
+        // console.log(location);
+        // console.log('location'+ JSON.stringify(location));
 
         return [location];
 

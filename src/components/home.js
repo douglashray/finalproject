@@ -15,13 +15,10 @@ const Home = (props) => {
   // const flights = useSelector((state) => state.flights);
   // const hotels = useSelector((state) => state.hotels);
   // const utc = new Date();
-  const tripDetails = {
+  const teamDetails = {
     team: '',
     teamId: '',
     teamVenue: '',
-    departureCity: '',
-    departureDate: '',
-    returnDate: '',
     destination: '',
   }
   // let destinationTest = team[0].city;
@@ -30,7 +27,7 @@ const Home = (props) => {
   const dispatch = useDispatch();
   
   // console.log('hotelLocation'+hotelLocation);
-  console.log('destination'+ destination);
+  // console.log('destination'+ destination);
   // console.log('departure'+departure);
 
  
@@ -96,9 +93,9 @@ const Home = (props) => {
 
   const displayTeam = () => {
     team.map((p) => (
-      tripDetails.teamId = p.id,
-      tripDetails.teamVenue = p.venueId,
-      tripDetails.destination = p.city
+      teamDetails.teamId = p.id,
+      teamDetails.teamVenue = p.venueId,
+      teamDetails.destination = p.city
     ));
 
     // SearchGames();
@@ -187,7 +184,7 @@ const Home = (props) => {
 
     event.preventDefault();
 
-    tripDetails.team = event.target['query'].value;
+    teamDetails.team = event.target['query'].value;
     // tripDetails.departureCity = event.target['departure-city'].value;
     // tripDetails.departureDate = event.target['departure-date'].value;
     // tripDetails.returnDate = event.target['return-date'].value;
@@ -198,7 +195,7 @@ const Home = (props) => {
     if(!event) {
       console.log('waiting for search');
     } else {
-      dispatch(fetchTeam(tripDetails.team))
+      dispatch(fetchTeam(teamDetails.team))
       
       // dispatch(fetchDeparture(tripDetails.departureCity));
 
@@ -230,8 +227,9 @@ const Home = (props) => {
       
       // console.log('gamesSearch' + JSON.stringify(tripDetails.destination));
       
-      await dispatch(fetchGames(tripDetails.teamId, tripDetails.teamVenue));
-      await dispatch(fetchAirportDestination(tripDetails.destination));
+      await dispatch(fetchGames(teamDetails.teamId, teamDetails.teamVenue));
+      await dispatch(fetchAirportDestination(teamDetails.destination));
+      
       // await data.json(data);
       }
     }

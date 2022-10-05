@@ -14,9 +14,9 @@ const departureAirportReducer = function(state = initialState, action) {
         // console.log('action.payload.response' + JSON.stringify(action.payload.response));
         const citySearch = action.payload;
 
-        console.log('departureAirportReducer' + JSON.stringify(citySearch))
+        // console.log('departureAirportReducer' + JSON.stringify(citySearch))
 
-        const departure = citySearch.map((p) => {
+        const departure = citySearch.slice(0,1).map((p) => {
           return {
             id: p.id,
             cityCode: p.cityCode,
