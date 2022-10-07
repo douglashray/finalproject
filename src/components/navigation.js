@@ -16,7 +16,7 @@ const Nav = () => {
     }));
   }
 
-  console.log('navigation');
+  // console.log('navigation');
 
   const renderNav = () => {
     if (authenticated) {

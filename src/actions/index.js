@@ -214,7 +214,7 @@ export const fetchHotels = (id, checkin, checkout) => async dispatch => {
       dispatch({type: FETCH_HOTELS,
         payload: response.data});
     }).catch(function (error) {
-      console.error(error);
+      console.error(error.response);
     });
 };
 
@@ -250,12 +250,12 @@ export const fetchFlights = (departure, destination, date_departure, date_depart
     dispatch({type: FETCH_FLIGHTS,
       payload: response.data});
   }).catch(function (error) {
-    console.error(error);
+    console.error(error.response);
   });
 };
 
 export const signup = (form, callback) => dispatch => {
-  axios.post('http://localhost:3000/signup', form)
+  axios.post('http://localhost:8000/signup', form)
     .then(function(response) {
       dispatch({ type: AUTHENTICATION_USER, payload: response.data });
       localStorage.setItem('token', response.data.token);

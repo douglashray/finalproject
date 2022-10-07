@@ -4,7 +4,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { Table, Button, Image, Container, Row, Col, Form } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchTeam, fetchGames, fetchAirportDestination, fetchHotelDestination, fetchDeparture, fetchFlights, fetchHotels  } from '../actions';
-import { useParams, useLocation } from "react-router-dom";
+import { useParams, useLocation, Link } from "react-router-dom";
+import { format, formatDistance, formatRelative, subDays } from 'date-fns'
 import '../index.css';
 // import TeamDetails from './components/teamdetails';
 
@@ -17,8 +18,8 @@ const TravelSearch = (props) => {
     teamId: '',
     teamVenue: '',
     departureCity: '',
-    departureDate: '2022-10-05',
-    returnDate: '2022-10-20',
+    departureDate: format(Date.now()+1),
+    returnDate: '2022-10-21',
     destination: '',
   }
   
@@ -43,11 +44,11 @@ const TravelSearch = (props) => {
 
   // console.log('from'+ JSON.stringify(from));
   // console.log('team'+ JSON.stringify(team));
-  console.log('destination'+ JSON.stringify(destination[0]));
-  console.log('departure'+ JSON.stringify(departure));
-  // console.log('flights'+ JSON.stringify(flights));
-  console.log('hotelLocation'+ JSON.stringify(hotelLocation));
-  console.log('hotels'+ JSON.stringify(hotels));
+  // console.log('destination'+ JSON.stringify(destination[0]));
+  // console.log('departure'+ JSON.stringify(departure));
+  // // console.log('flights'+ JSON.stringify(flights));
+  // console.log('hotelLocation'+ JSON.stringify(hotelLocation));
+  // console.log('hotels'+ JSON.stringify(hotels));
  
   // function find(games) {
   //   return games.id === id;
@@ -72,7 +73,6 @@ const TravelSearch = (props) => {
     // console.log('destination[0].longitude, destination[0].latitude' + destination[0].longitude, destination[0].latitude)
     
     // const departurecity = event.getElementById['departure'].value;
-    const departurecity = 'denver';
 
     if(!event) {
       console.log('waiting for search');
@@ -109,7 +109,6 @@ const TravelSearch = (props) => {
       // console.log('hotelSearch' + JSON.stringify(departure));
       await dispatch(fetchHotels(hotelLocation[0].id, tripDetails.departureDate, tripDetails.returnDate));
 
-      // Freeze while sortin
       await dispatch(fetchFlights(departure[0].cityCode, destination[0].cityCode, tripDetails.departureDate, tripDetails.returnDate))
     }
     }
@@ -118,12 +117,16 @@ const TravelSearch = (props) => {
       .catch(console.error);
   }, [departure]);
 
+  const add = (selection) => {
+    console.log('selection' + selection)
+  }
+
   const flightComponents = flights.map((p) => {
     // if(p.airline === 'UA') {
     //   const airlineName = 'United';
     // }
 
-    if(p.airline === 'UA' || 'AA' || 'DL') {
+    if(p.airline == 'UA' || 'AA' || 'DL') {
     // const flight = flights[id];
 
     // return <Flight 
@@ -131,8 +134,7 @@ const TravelSearch = (props) => {
     //   flightNum = {p.flightNumber} 
     //   /> 
     return (
-      <table>
-        <tbody>
+      
         <tr>
           <td>
             <ul>
@@ -142,21 +144,19 @@ const TravelSearch = (props) => {
                 <p>Return: {p.arrival}</p> */}
                 <p>Airline: {p.airline}</p>
                 <p>Price: {p.price}</p>
+                <p><Link to={add}>Select</Link></p>
               </li>
             </ul>
           </td> 
         </tr>
-        </tbody>
-      </table> 
+       
     )
     } 
   })
 
   const hotelComponents = hotels.map((p) => {
     return (
-      <table>
-        <tbody>
-        <tr>
+      <tr>
           <td>
             <ul>
               <li key={p.id}>
@@ -164,12 +164,11 @@ const TravelSearch = (props) => {
                 <p>Price: {p.minPrice}</p>
                 <p>Rating: {p.starRating}</p>
                 <p><img src={p.img} /> </p>
+                <p><Link to={add}>Select</Link></p>
               </li>
             </ul>
-          </td> 
-        </tr>
-        </tbody>
-      </table> 
+            </td> 
+        </tr>   
     )
   })
 
@@ -207,11 +206,24 @@ const TravelSearch = (props) => {
         </tr>
       </table>
     </div>
-    <div className="flights">
-      {flightComponents}
-    </div>
-    <div className="hotels">{hotelComponents}</div>
     </Main>
+    <Results>
+    <div className="flights-hotels">
+      <table>
+        <tbody>
+          <tr><td>Travel Options from {tripDetails.departureDate} to {tripDetails.returnDate}</td></tr>
+          <tr>
+            <td>
+              {flightComponents}
+            </td>
+            <td>
+              {hotelComponents}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    </Results>
     </Container>
   )
 }
@@ -229,7 +241,7 @@ display: flex;
 
 `;
 
-const Flight = styled.div`
+const Results = styled.div`
 display: flex;
   flex-direction: row;
   justify-content: space-around;
@@ -237,5 +249,6 @@ display: flex;
   padding: 2em;
   margin: 0 auto;
   padding-top: 100px;
+  vertical-align: top;
 
 `;

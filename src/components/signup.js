@@ -13,7 +13,7 @@ const userSchema = Yup.object().shape({
 });
 
 const Signup = (props) => {
-  console.log('signup');
+  // console.log('signup');
   const { register, handleSubmit, errors } = useForm({
     resolver: yupResolver(userSchema)
   });
