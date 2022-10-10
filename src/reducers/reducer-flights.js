@@ -18,7 +18,7 @@ const flightsReducer = function(state = initialState, action) {
 
         const flights = flightSearch.pricedItinerary.map((p) => {
           return {
-            id: p.id,
+            id: p.slice.uniqueSliceId,
             airline: p.pricingInfo.ticketingAirline,
             price: p.pricingInfo.totalFare,
             slice: p.slice.uniqueSliceId

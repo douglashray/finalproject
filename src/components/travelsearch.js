@@ -12,13 +12,16 @@ import '../index.css';
 const TravelSearch = (props) => {
   // console.log('travelsearch fired');
   const { id } = useParams();
+  const today = new Date();
+  const [cart, setCart] = useState([]);
+  const cartTotal = cart.reduce((total, {price = 0}) => total + price, 0);
 
   const tripDetails = {
     team: '',
     teamId: '',
     teamVenue: '',
     departureCity: '',
-    departureDate: format(Date.now()+1),
+    departureDate: '2022-10-14',
     returnDate: '2022-10-21',
     destination: '',
   }
@@ -43,12 +46,6 @@ const TravelSearch = (props) => {
   // const { from } = location.state;
 
   // console.log('from'+ JSON.stringify(from));
-  // console.log('team'+ JSON.stringify(team));
-  // console.log('destination'+ JSON.stringify(destination[0]));
-  // console.log('departure'+ JSON.stringify(departure));
-  // // console.log('flights'+ JSON.stringify(flights));
-  // console.log('hotelLocation'+ JSON.stringify(hotelLocation));
-  // console.log('hotels'+ JSON.stringify(hotels));
  
   // function find(games) {
   //   return games.id === id;
@@ -117,66 +114,87 @@ const TravelSearch = (props) => {
       .catch(console.error);
   }, [departure]);
 
-  const add = (selection) => {
-    console.log('selection' + selection)
-  }
+  const add = (p) => {
+    console.log('selection' + JSON.stringify(p));
+    setCart([...cart, p]);
+  };
+
+  const cartItems = cart.map((p) => (
+    (!p.airline) ?
+    <div key={p.id}>
+      {`${p.name}: starting at $${p.price}/night`}
+      <input type='submit' value='remove' onClick={() => remove(p)} />
+    </div>
+    : 
+    <div key={p.id}>
+      {`Airline: ${p.airline} Round Trip: $${p.price}`}
+      <input type='submit' value='remove' onClick={() => remove(p)} />
+    </div>
+  ));
+
+  const remove = (p) => {
+    let theCart = [...cart];
+    theCart = theCart.filter((cartItem) => cartItem.id !== p.id);
+    setCart(theCart);
+  };
 
   const flightComponents = flights.map((p) => {
     // if(p.airline === 'UA') {
     //   const airlineName = 'United';
     // }
 
-    if(p.airline == 'UA' || 'AA' || 'DL') {
-    // const flight = flights[id];
+    if(p.airline == 'AA' || 'UA') {
 
-    // return <Flight 
-    //   id={p.flightNumber} 
-    //   flightNum = {p.flightNumber} 
-    //   /> 
     return (
       
         <tr>
           <td>
             <ul>
-              <li key={p.flightNumber}>
+              <li key={p.id}>
                 {/* <p>Flight: {p.flightNumber}</p>
                 <p>Departure: {p.departure}</p>
                 <p>Return: {p.arrival}</p> */}
                 <p>Airline: {p.airline}</p>
                 <p>Price: {p.price}</p>
-                <p><Link to={add}>Select</Link></p>
+                <p><Link value='add' onClick={() => add(p)}>Select</Link></p>
               </li>
             </ul>
           </td> 
         </tr>
        
-    )
-    } 
+    ) 
+    
+  } 
+
   })
 
   const hotelComponents = hotels.map((p) => {
-    return (
-      <tr>
-          <td>
-            <ul>
-              <li key={p.id}>
-                <p>Hotel: {p.name}</p>
-                <p>Price: {p.minPrice}</p>
-                <p>Rating: {p.starRating}</p>
-                <p><img src={p.img} /> </p>
-                <p><Link to={add}>Select</Link></p>
-              </li>
-            </ul>
-            </td> 
-        </tr>   
-    )
+    if(!p.name) {
+      console.log(p); 
+    } else {
+      return (
+        <tr>
+            <td>
+              <ul>
+                <li key={p.id}>
+                  <p>Hotel: {p.name}</p>
+                  <p>Price: {p.price}</p>
+                  <p>Rating: {p.starRating}</p>
+                  <p><img src={p.img} /> </p>
+                  <p><Link value='add' onClick={() => add(p)}>Select</Link></p>
+                </li>
+              </ul>
+              </td> 
+          </tr>   
+      )
+    }
   })
 
   return (
     <Container>
     <Main>
     <div className='main'>
-      <p>Match Day: {result.date}</p>
+      <p>Match Day: {result.date} || {cartTotal}</p>
       <table className='main-table'>
         <tr>
           <td>
@@ -212,12 +230,15 @@ const TravelSearch = (props) => {
       <table>
         <tbody>
           <tr><td>Travel Options from {tripDetails.departureDate} to {tripDetails.returnDate}</td></tr>
+          <tr><td>{cartItems}</td></tr>
           <tr>
             <td>
-              {flightComponents}
+              <p>Flight Results</p>
+              <p>{flightComponents}</p>
             </td>
             <td>
-              {hotelComponents}
+              <p>Hotel Results</p>
+              <p>{hotelComponents}</p>
             </td>
           </tr>
         </tbody>

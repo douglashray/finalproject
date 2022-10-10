@@ -23,7 +23,7 @@ const hotelsReducer = function(state = initialState, action) {
             brand: p.brand,
             img: p.thumbnailUrl,
             starRating: p.starRating,
-            minPrice: p.ratesSummary.minPrice,
+            price: p.ratesSummary.minPrice,
           }
         })
 
