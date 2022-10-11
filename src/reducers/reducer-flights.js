@@ -14,17 +14,13 @@ const flightsReducer = function(state = initialState, action) {
         
         const flightSearch = action.payload;
 
-        // console.log('flightSearch' + JSON.stringify(flightSearch));
+        // console.log('flightSearch' + JSON.stringify(flightSearch.pricedItinerary));
 
         const flights = flightSearch.pricedItinerary.map((p) => {
           return {
-            id: p.slice.uniqueSliceId,
+            id: Math.floor(Math.random() * 1000),
             airline: p.pricingInfo.ticketingAirline,
-            price: p.pricingInfo.totalFare,
-            slice: p.slice.uniqueSliceId
-            // flightNumber: p.flightNumber,
-            // arrival: p.arrivalDateTime,
-            // departure: p.departDateTime,
+            price: Number(p.pricingInfo.totalFare),
           }
         })
 

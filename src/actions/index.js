@@ -206,8 +206,8 @@ export const fetchHotels = (id, checkin, checkout) => async dispatch => {
       }
     };
 
-    console.log('options' + options)
-    console.log('options' + JSON.stringify(options))
+    // console.log('options' + options)
+    // console.log('options' + JSON.stringify(options))
   
     await axios.request(options).then(function (response) {
       

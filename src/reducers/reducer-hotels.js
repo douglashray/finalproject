@@ -14,7 +14,7 @@ const hotelsReducer = function(state = initialState, action) {
         // console.log('action.payload.response' + JSON.stringify(action.payload.response));
         const hotelSearch = action.payload;
 
-        console.log('hotelSearch' + JSON.stringify(hotelSearch));
+        // console.log('hotelSearch' + JSON.stringify(hotelSearch));
 
         const hotels = hotelSearch.hotels.map((p) => {
           return {
@@ -23,7 +23,7 @@ const hotelsReducer = function(state = initialState, action) {
             brand: p.brand,
             img: p.thumbnailUrl,
             starRating: p.starRating,
-            price: p.ratesSummary.minPrice,
+            price: Number(p.ratesSummary.minPrice),
           }
         })
 

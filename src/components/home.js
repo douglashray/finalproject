@@ -26,38 +26,6 @@ const Home = (props) => {
   // console.log('tripDetails'+ JSON.stringify(tripDetails));
 
   const dispatch = useDispatch();
-  
-  // console.log('hotelLocation'+hotelLocation);
-  // console.log('destination'+ destination);
-  // console.log('departure'+departure);
-
- 
-
-  // useEffect(() => {
-  //   if(!tripDetails.teamId) {
-  //     console.log('none');
-  //   } else {
-      
-  //   console.log('useEffect' + tripDetails.teamId);
-  //   // dispatch(fetchGames(42, 494);
-  //   }
-  // }, []);
-  
-  // const searchDeparture = (event) => {
-  //   console.log(event);
-  //   event.preventDefault();
-
-  //   // const departurecity = event.getElementById['departure'].value;
-  //   const departurecity = 'denver';
-
-  //   if(!event) {
-  //     console.log('waiting for search');
-  //   } else {
-  //     dispatch(fetchAirportDestination('London'))
-      
-  //     dispatch(fetchDeparture(departurecity))
-  //   }
-  // }
 
   const Team = (props) => {
     // console.log('props' + JSON.stringify(props.id) + JSON.stringify(props.venueId));
@@ -89,6 +57,11 @@ const Home = (props) => {
         {/* <p>{SearchGames(props.id, props.venueId)}</p> */}
       </div>
     )
+  };
+
+  const addGame = (p) => {
+    // setCart([...cart, p]);
+    console.log('addGame' + JSON.stringify(p));
   };
 
 
@@ -153,8 +126,8 @@ const Home = (props) => {
             <ul>
               <li key={props.id}>
                 <Link to={`/${props.id}`} 
-                state={{ from: "games" }}
-                // onClick= {selectGame(props.id)}
+                // state={{ from: "games" }}
+                onClick= {() => addGame(props)}
                 // onClick={() => dispatch(selectGame(props))}
                 >
                 <p>vs. {props.awayTeam}</p>
@@ -230,25 +203,13 @@ const Home = (props) => {
       
       await dispatch(fetchGames(teamDetails.teamId, teamDetails.teamVenue));
       await dispatch(fetchAirportDestination(teamDetails.destination));
-      
-      // await data.json(data);
+
       }
     }
 
     gamesSearch()
     .catch(console.error);
   }, [team]);
-
-  // useEffect(() => {
-  //   const hotelSearch = async () => {
-  //     console.log('hotelSearch' + JSON.stringify(destination));
-  //     // await dispatch(fetchHotelDestination(destination[0].longitude, destination[0].latitude));
-  //   }
-
-  //   hotelSearch()
-  //     .catch(console.error);
-  // }, [destination]);
-
 
   return (
     <Container>
@@ -265,15 +226,6 @@ const Home = (props) => {
                     <label htmlFor="query">Favorite Team:&nbsp;</label>
                     <input className='query' name='query' />
                     &nbsp;
-                    {/* <label htmlFor="departure-city">Departure City:&nbsp;</label>
-                    <input className='departure-city' name='departure-city'/>
-                    &nbsp;
-                    <label htmlFor="departure-date">Departure Date:&nbsp;</label>
-                    <input className='departure-date' name='departure-date' type='date'/>
-                    &nbsp;
-                    <label htmlFor="return-date">Return Date:&nbsp;</label>
-                    <input className='return-date' name='return-date' type='date'/>
-                    &nbsp; */}
                     <button className='btn btn-secondary' type='submit'>Search</button>
                   </form>
                 
@@ -290,11 +242,8 @@ const Home = (props) => {
             </tr>
             <tr>
               <td>
-              
-                
+
                 {displayGames(games)}
-                
-                
               
               </td>
             </tr>

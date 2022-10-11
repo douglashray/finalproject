@@ -15,6 +15,8 @@ const TravelSearch = (props) => {
   const today = new Date();
   const [cart, setCart] = useState([]);
   const cartTotal = cart.reduce((total, {price = 0}) => total + price, 0);
+  const [dateDeparture, setDeparture] = useState([]);
+  const [dateReturn, setReturn] = useState([]);
 
   const tripDetails = {
     team: '',
@@ -62,10 +64,13 @@ const TravelSearch = (props) => {
     // let addDetails = { ...tripDetails}
     
     tripDetails.departureCity = event.target['departure-city'].value;
-    tripDetails.departureDate = event.target['departure-date'].value;
-    tripDetails.returnDate = event.target['return-date'].value;
+    const departureDate = event.target['departure-date'].value;
+    const returnDate = event.target['return-date'].value;
 
-    console.log('searchAccomodations.tripDetails' + JSON.stringify(tripDetails));
+    setDeparture([...dateDeparture, departureDate]);
+    setReturn([...dateReturn, returnDate]);
+
+    
 
     // console.log('destination[0].longitude, destination[0].latitude' + destination[0].longitude, destination[0].latitude)
     
@@ -92,21 +97,25 @@ const TravelSearch = (props) => {
     //   hotelDestination()
     //     .catch(console.error);
     }, []);
+
+  useEffect(() => {
+    console.log('cartTotal' + JSON.stringify(cartTotal));
+  }, [cartTotal]);
   
   useEffect(() => {
-    console.log('useEffect.tripDetails' + JSON.stringify(tripDetails));
+    // console.log('useEffect.tripDetails' + JSON.stringify(tripDetails));
     const accommodationSearch = async () => {
     if (isInitialMount.current) {
       isInitialMount.current = false;
     } else {
-      console.log('hotelLocation.id' + hotelLocation);
-      console.log('hotelSearchtripDetails.departureDate' + tripDetails.departureDate);
-    console.log('hotelSearchtripDetails.returnDate' + tripDetails.returnDate);
-
+    //   console.log('hotelLocation.id' + hotelLocation);
+    //   console.log('hotelSearchtripDetails.departureDate' + tripDetails.departureDate);
+    // console.log('hotelSearchtripDetails.returnDate' + tripDetails.returnDate);
+    console.log('dates' + JSON.stringify(dateDeparture) + 'and' + JSON.stringify(dateReturn));
       // console.log('hotelSearch' + JSON.stringify(departure));
       await dispatch(fetchHotels(hotelLocation[0].id, tripDetails.departureDate, tripDetails.returnDate));
 
-      await dispatch(fetchFlights(departure[0].cityCode, destination[0].cityCode, tripDetails.departureDate, tripDetails.returnDate))
+      await dispatch(fetchFlights(departure[0].cityCode, destination[0].cityCode, dateDeparture[0], dateReturn[0]))
     }
     }
 
@@ -115,8 +124,19 @@ const TravelSearch = (props) => {
   }, [departure]);
 
   const add = (p) => {
-    console.log('selection' + JSON.stringify(p));
     setCart([...cart, p]);
+    console.log('add' + JSON.stringify(cart));
+  };
+
+  const remove = (p) => {
+    let theCart = [...cart];
+    theCart = theCart.filter((cartItem) => cartItem.id !== p.id);
+    setCart(theCart);
+  };
+
+  const buy = () => {
+    // setCart([...cart, p]);
+    console.log('buy' + JSON.stringify());
   };
 
   const cartItems = cart.map((p) => (
@@ -132,18 +152,14 @@ const TravelSearch = (props) => {
     </div>
   ));
 
-  const remove = (p) => {
-    let theCart = [...cart];
-    theCart = theCart.filter((cartItem) => cartItem.id !== p.id);
-    setCart(theCart);
-  };
+  
 
   const flightComponents = flights.map((p) => {
     // if(p.airline === 'UA') {
     //   const airlineName = 'United';
     // }
 
-    if(p.airline == 'AA' || 'UA') {
+    if(p.airline === 'AA' || 'UA') {
 
     return (
       
@@ -231,6 +247,10 @@ const TravelSearch = (props) => {
         <tbody>
           <tr><td>Travel Options from {tripDetails.departureDate} to {tripDetails.returnDate}</td></tr>
           <tr><td>{cartItems}</td></tr>
+          <tr>
+            <td>{cartTotal}</td>
+            <td><input type='submit' value='Buy' onClick={buy}/></td>
+          </tr>
           <tr>
             <td>
               <p>Flight Results</p>
