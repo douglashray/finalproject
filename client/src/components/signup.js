@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { useNavigate } from 'react-router-dom';
@@ -6,6 +6,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import styled from "styled-components";
 import { signup } from '../actions';
+import Axios from 'axios';
 
 const userSchema = Yup.object().shape({
   email: Yup.string().email().required(),
@@ -17,15 +18,18 @@ const Signup = (props) => {
   const { register, handleSubmit, errors } = useForm({
     resolver: yupResolver(userSchema)
   });
+  const [email, setEmail] = useState();
+  const [password, setPassword] = useState();
 
   const dispatch = useDispatch();
   const history = useNavigate();
 
   const handleForm = (data) => {
+    console.log('handleForm' + data + JSON.stringify(data));
     dispatch(signup(data, () => {
       history.push('/');
     }));
-    console.log('handleForm');
+    
   };
 
   return (
@@ -37,14 +41,16 @@ const Signup = (props) => {
           </label>
           <input 
           className='form-control'
-          name='email' {...register('email', { required: true })}></input>
-          {/* {errors.email?.message} */}
+          name='email' {...register('email', { required: true })} onChange={(e) => {setEmail(e.target.value);
+          }} />
+                    {/* {errors.email?.message} */}
         </div>
         <div className='form-group'>
           <label>Password</label>
           <input 
           className='form-control'
-          name='password' {...register('password', { required: true })}></input>
+          name='password' {...register('password', { required: true })} onChange={(e) => {setPassword(e.target.value);
+          }} />
           {/* {errors.password?.message} */}
         </div>
         <button className='btn btn-secondary' type='Submit'>Sign Up</button>

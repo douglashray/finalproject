@@ -234,7 +234,7 @@ export const fetchFlights = (departure, destination, date_departure, date_depart
       price_max: '20000',
       number_of_passengers: '1',
       duration_max: '2051',
-      price_min: '100',
+      price_min: '250',
       date_departure_return: date_departure_return
     },
     headers: {
@@ -255,19 +255,21 @@ export const fetchFlights = (departure, destination, date_departure, date_depart
 };
 
 export const signup = (form, callback) => dispatch => {
-  axios.post('http://localhost:8000/signup', form)
+  console.log('signup' + JSON.stringify(form));
+  axios.post('/signup', form)
     .then(function(response) {
       dispatch({ type: AUTHENTICATION_USER, payload: response.data });
       localStorage.setItem('token', response.data.token);
       callback();
     })
     .catch(function (error) {
+      console.log(error);
       dispatch({ type: AUTHENTICATION_ERROR, payload: error });
     });
 };
 
 export const login = (form, callback) => dispatch => {
-  axios.post('http://localhost:3000/login', form)
+  axios.post('/login', form)
     .then(function(response) {
       dispatch({ type: AUTHENTICATION_USER, payload: response.data });
       localStorage.setItem('token', response.data.token);

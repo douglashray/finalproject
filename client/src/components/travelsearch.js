@@ -23,8 +23,8 @@ const TravelSearch = (props) => {
     teamId: '',
     teamVenue: '',
     departureCity: '',
-    departureDate: '2022-10-14',
-    returnDate: '2022-10-21',
+    departureDate: '',
+    returnDate: '',
     destination: '',
   }
   
@@ -99,7 +99,7 @@ const TravelSearch = (props) => {
     }, []);
 
   useEffect(() => {
-    console.log('cartTotal' + JSON.stringify(cartTotal));
+    console.log('cartTotal' + JSON.stringify(cart));
   }, [cartTotal]);
   
   useEffect(() => {
@@ -136,7 +136,7 @@ const TravelSearch = (props) => {
 
   const buy = () => {
     // setCart([...cart, p]);
-    console.log('buy' + JSON.stringify());
+    console.log('buy' + cart);
   };
 
   const cartItems = cart.map((p) => (
@@ -155,12 +155,12 @@ const TravelSearch = (props) => {
   
 
   const flightComponents = flights.map((p) => {
-    // if(p.airline === 'UA') {
-    //   const airlineName = 'United';
-    // }
+    const airlineArray = ['AA', 'UA', 'DL'];
 
-    if(p.airline === 'AA' || 'UA') {
-
+    if (airlineArray.indexOf(p.airline) >0) {
+    //   console.log(p);}
+    // // if(p.airline === 'AA') {
+    //   else {
     return (
       
         <tr>

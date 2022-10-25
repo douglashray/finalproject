@@ -3,9 +3,11 @@ const http = require('http');
 const bodyParser = require('body-parser');
 // const router = require('./router');
 const mongoose = require('mongoose');
-// const cors = require('cors');
+const cors = require('cors');
 
-
+const app = express();
+app.use(express.json());
+// app.use(bodyParser.json());
 
 // Database
 // mongoose.connect(keys.MONGODB_URI, {
@@ -25,11 +27,14 @@ mongoose.connect(
   }
 )
 
-const app = express();
 
-// app.use(cors());
 
-// // app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cors());
+
+app.use(express.urlencoded({extended: true}));
+
+
+// app.use(bodyParser.urlencoded({ extended: false }));
 
 // router(app);
 
@@ -43,20 +48,24 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use(bodyParser.json());
-app.use(
-  bodyParser.urlencoded({
-    extended: true,
-  })
-);
 
-const mainRoutes = require("./routes/main");
+// app.use(
+//   bodyParser.urlencoded({
+//     extended: true,
+//   })
+// );
 
-app.use(mainRoutes);
+// const mainRoutes = require("./routes/main");
+
+// app.use(mainRoutes);
 
 
 // Server
-const port = process.env.PORT || 8000;
+const port = 8000;
 const server = http.createServer(app);
 server.listen(port);
 console.log('listening on ' + port);
+// app.listen(8000, () => {
+//   console.log("Node.js listening on port " + 8000);
+// });
+// 
