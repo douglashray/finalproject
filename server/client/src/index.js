@@ -41,6 +41,14 @@ render(
       <Fragment>
       <Navigation />
       <App>
+      <Routes>
+    <Route exact path='/' 
+    // element={<Home />} 
+    />
+            <Route exact path='/signup' element={<Signup />} />
+            <Route exact path='/login' element={<Login />} /> 
+            <Route exact path='/:id' element={<TravelSearch />} />
+    </Routes>
       {/* <Switch> */}
       
         {/* <Routes>

@@ -254,16 +254,16 @@ export const fetchFlights = (departure, destination, date_departure, date_depart
   });
 };
 
-export const signup = (form, callback) => dispatch => {
-  console.log('signup' + JSON.stringify(form));
-  axios.post('/signup', form)
+export const signup = (form, callback) => async dispatch => {
+  // console.log('signup' + JSON.stringify(form));
+  axios.post('/signup',  form)
     .then(function(response) {
       dispatch({ type: AUTHENTICATION_USER, payload: response.data });
       localStorage.setItem('token', response.data.token);
       callback();
     })
     .catch(function (error) {
-      console.log(error);
+      // console.log(error);
       dispatch({ type: AUTHENTICATION_ERROR, payload: error });
     });
 };

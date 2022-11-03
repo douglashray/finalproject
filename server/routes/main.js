@@ -1,5 +1,8 @@
 const router = require("express").Router();
+const { UserModel, validate } = require('../models/users');
+const express = require('express');
 const teams = require("../models/teams");
+const users = require("../models/users");
 
 router.get("/team", (req, res, next) => {
   const search = req.query.search;
@@ -24,5 +27,26 @@ router.get("/team", (req, res, next) => {
     });
   }
 });
+
+router.post ('/signup', async (req, res) => {
+  const {error} = validate(req.body);
+  if (error) {
+    return res.status(400).send(error.details[0].message);
+  }
+
+  let user = await UserModel.findOne({ email: req.body.email });
+  if (user) {
+    return res.status(400).send('User exists');
+  } else {
+    user = new UserModel({
+      email: req.body.email,
+      password: req.body.password
+    });
+    await user.save();
+    res.send(user);
+  }
+});
+
+
 
 module.exports = router;

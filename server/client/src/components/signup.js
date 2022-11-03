@@ -25,7 +25,10 @@ const Signup = (props) => {
   const history = useNavigate();
 
   const handleForm = (data) => {
-    console.log('handleForm' + data + JSON.stringify(data));
+    // console.log('handleForm' + data);
+    // data.preventDefault();
+
+    
     dispatch(signup(data, () => {
       history.push('/');
     }));
@@ -35,6 +38,7 @@ const Signup = (props) => {
   return (
     <Form>
       <form onSubmit={handleSubmit(handleForm)}>
+      {/* <form onSubmit={handleForm}> */}
         <div className='form-group'>
           <label>
             Email
