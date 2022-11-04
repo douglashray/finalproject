@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
-import { useNavigate } from 'react-router-dom';
+import { redirect, Redirect, useNavigate } from 'react-router-dom';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import styled from "styled-components";
@@ -30,7 +30,13 @@ const Signup = (props) => {
 
     
     dispatch(signup(data, () => {
-      history.push('/');
+      history('/');
+      // return redirect("/login");
+      // <Redirect
+      // to={{
+      //   pathname: "/login",
+      // }}
+      // />
     }));
     
   };
@@ -57,7 +63,9 @@ const Signup = (props) => {
           }} />
           {/* {errors.password?.message} */}
         </div>
-        <button className='btn btn-secondary' type='Submit'>Sign Up</button>
+        <button className='btn btn-secondary' type='Submit' 
+        // onClick={() => history('/')}
+        >Sign Up</button>
       </form>
     </Form>
   )
