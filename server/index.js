@@ -1,14 +1,21 @@
 const express = require('express');
+const config = require('config');
 const http = require('http');
 const bodyParser = require('body-parser');
 // const router = require("express").Router();
 const mongoose = require('mongoose');
 const users = require('./routes/users');
+const auth = require('./routes/auth');
 // const router = require('./router');
 const cors = require('cors');
 const Joi = require('joi');
-
 const app = express();
+
+if (!config.get('PrivateKey')) {
+  console.error('FATAL ERROR: PrivateKey is not defined.');
+  process.exit(1);
+}
+
 app.use(express.json());
 
 app.use(cors());
@@ -28,49 +35,6 @@ app.use(
 //   useUnifiedTopology: true,
 // });
 
-app.get('/', (req, res) => {
-  res.send('change');
-});
-
-const games = [{
-  id: 1,
-  title: 'Mario'
-},
-{
-  id: 2,
-  title: 'Zelda'
-},
-{
-  id: 3,
-  title: 'Donkey Kong'
-}
-];
-
-app.get('/api/games', (req, res) => {
-  res.send(['Mario', 'Zelda', 'Donkey Kong']);
-});
-
-// add a game
-app.post('/api/games', (req, res) => {
-  // const schema = {
-  //   title: Joi.string().min(2).required()
-  // };
-  
-  // const result = schema.validate(req.body);
-
-  // if (result.error) {
-  //   res.status(400).send(result.error)
-  // }
-
-  const game = {
-      id: games.length + 1,
-      title: req.body.title
-  }
-
-  games.push(game);
-  res.send(game);
-});
-
 mongoose.connect(
   'mongodb://localhost/finalproject',
   {
@@ -84,6 +48,8 @@ mongoose.connect(
 )
 
 app.use('/api/users', users);
+app.use('/api/auth', auth);
+
 
 // app.use(bodyParser.urlencoded({ extended: false }));
 
@@ -99,9 +65,6 @@ app.use((req, res, next) => {
   next();
 });
 
-
-
-
 // const mainRoutes = require(".client/src/routes/main");
 
 // app.use(mainRoutes);
@@ -111,7 +74,7 @@ app.use((req, res, next) => {
 const port = process.env.PORT || 8000;
 const server = http.createServer(app);
 server.listen(port);
-console.log(`listening on port... ${port}`);
+console.log(`listening on port...${port}`);
 // app.listen(8000, () => {
 //   console.log("Node.js listening on port " + 8000);
 // });
