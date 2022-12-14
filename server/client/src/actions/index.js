@@ -269,7 +269,7 @@ export const signup = (form, callback) => async dispatch => {
 };
 
 export const login = (form, callback) => dispatch => {
-  axios.post('/login', form)
+  axios.post('http://localhost:8000/login', form)
     .then(function(response) {
       dispatch({ type: AUTHENTICATION_USER, payload: response.data });
       localStorage.setItem('token', response.data.token);
